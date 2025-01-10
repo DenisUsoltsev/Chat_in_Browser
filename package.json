@@ -1,0 +1,24 @@
+{
+  "name": "chat_in_browser",
+  "version": "1.0.0",
+  "description": "WebSocket technology",
+  "homepage": "https://github.com/DenisUsoltsev/Chat_in_Browser#readme",
+  "bugs": {
+    "url": "https://github.com/DenisUsoltsev/Chat_in_Browser/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DenisUsoltsev/Chat_in_Browser.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2",
+    "ws": "^8.18.0"
+  }
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Chat in Browser</title>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-history" id="chatHistory"> <!-- Вывод чата --> </div>
+        <form class="chat-input">
+            <input type="text" id="chatInput" placeholder="Введите сообщение...">
+            <button id="sendButton">Отправить</button>
+        </form>
+    </div>
+
+    <script>
+        const chatHistory = document.getElementById('chatHistory');
+        const chatInput = document.getElementById('chatInput');
+        const sendButton = document.getElementById('sendButton');
+
+        // Токен генерерируется при запуске сервера
+        // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjM0NSIsImlhdCI6MTczNjUxMTA1MywiZXhwIjoxNzM2NTE0NjUzfQ.NslFNLxmCY6tT54Ja83OaT8kjvi8hqMx6bUTUYrQBxg';
+
+        // Подключение к WebSocket серверу
+        const socket = new WebSocket('ws://localhost:8080');
+        // const socket = new WebSocket(`ws://localhost:8080?token=${token}`);
+
+        // Обработка сообщений от сервера
+        socket.addEventListener("message", (event) => {
+            const {type, message} = JSON.parse(event.data);
+            displayMessage(message, type);
+        });
+
+        // Отправка сообщения
+        const sendMessage = () => {
+            event.preventDefault();                                 // Нужно прервать стандартное событие браузера, иначе в консоли нечего не увидим
+            const message = chatInput.value.trim();
+            if (message) {
+                socket.send(message);
+                displayMessage(message, 'client');
+                chatInput.value = '';
+            }
+        };
+
+        // Обработка кнопки отправки
+        sendButton.addEventListener('click', sendMessage);
+
+        // Обработка нажатия Enter
+        chatInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Отображение сообщения в чате
+        const displayMessage = (message, sender) => {
+            const messageElement = document.createElement('p');
+            messageElement.textContent = message;
+            messageElement.classList.add(sender);
+            chatHistory.appendChild(messageElement);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        };
+    </script>
+</body>
+</html>
